@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { font-family: "Open Sans", sans-serif; }
+body { margin: 0; }
+h1, h2, h3, nav { font-family: "Montserrat", "Open Sans", sans-serif; }
+a:focus, button:focus, input:focus, select:focus { outline: 2px solid #A11176; outline-offset: 2px; }
