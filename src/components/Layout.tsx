@@ -13,7 +13,7 @@ export function Layout({
   showLanguageSwitcher?: boolean;
 }) {
   const location = useLocation();
-  const pricingPath = lang === "en" ? "/form/en" : lang === "es" ? "/form/es" : `/pricing?lang=${lang}`;
+  const pricingPath = lang === "en" ? "/form/en" : lang === "es" ? "/form/es" : "/form/pt";
   const trialCtaPath = pricingPath;
   const homePath = lang === "pt" ? "/" : lang === "en" ? "/en" : "/es";
   const ui =

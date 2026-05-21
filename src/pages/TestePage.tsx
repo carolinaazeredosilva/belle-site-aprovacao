@@ -410,8 +410,6 @@ const sourceLabelByLang: Record<TestePageLanguage, string> = {
 };
 
 function schema(lang: TestePageLanguage, labels: Copy["labels"]) {
-  const stateRule = lang === "pt" ? z.string().min(2, labels.required) : z.string().optional().default("");
-
   return z
     .object({
       fullName: z.string().min(2, labels.required),
@@ -419,7 +417,7 @@ function schema(lang: TestePageLanguage, labels: Copy["labels"]) {
       phone: z.string().min(8, labels.required),
       professionalsRange: z.string().min(1, labels.required),
       country: z.string().min(2, labels.required),
-      state: stateRule,
+      state: z.string().optional().default(""),
       city: z.string().min(2, labels.required),
       email: z.string().email(labels.invalidEmail),
       password: z.string().min(8, labels.passwordMin),
@@ -429,6 +427,18 @@ function schema(lang: TestePageLanguage, labels: Copy["labels"]) {
     .refine((data) => data.password === data.confirmPassword, {
       message: labels.passwordMismatch,
       path: ["confirmPassword"],
+    })
+    .superRefine((data, ctx) => {
+      const requiresState =
+        lang === "pt" && (data.country === "Brasil" || data.country === "Brazil");
+
+      if (requiresState && (!data.state || data.state.trim().length < 2)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: labels.required,
+          path: ["state"],
+        });
+      }
     });
 }
 

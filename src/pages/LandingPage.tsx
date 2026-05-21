@@ -490,7 +490,7 @@ const testimonialsByLang = {
 
 export function LandingPage({ lang }: { lang: Lang }) {
   const t = copyByLang[lang];
-  const trialPath = lang === "en" ? "/form/en" : lang === "es" ? "/form/es" : `/pricing?lang=${lang}`;
+  const trialPath = lang === "en" ? "/form/en" : lang === "es" ? "/form/es" : "/form/pt";
   const solutions = lang === "en" ? solutionsEn : lang === "es" ? solutionsEs : solutionsPt;
   const testimonials = testimonialsByLang[lang];
   const ui =

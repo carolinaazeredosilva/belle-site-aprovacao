@@ -1,6 +1,5 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { LandingPage } from "./pages/LandingPage";
-import { PricingPage } from "./pages/PricingPage";
 import { TestePage } from "./pages/TestePage";
 import { TermsPage } from "./pages/TermsPage";
 
@@ -9,6 +8,14 @@ function detectBrowserLangPath() {
   if (raw.startsWith("es")) return "/es";
   if (raw.startsWith("en")) return "/en";
   return "/";
+}
+
+function PricingRedirect() {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const rawLang = (params.get("lang") || "pt").toLowerCase();
+  const target = rawLang === "es" ? "/form/es" : rawLang === "en" ? "/form/en" : "/form/pt";
+  return <Navigate to={target} replace />;
 }
 
 export function App() {
@@ -26,7 +33,7 @@ export function App() {
       />
       <Route path="/en" element={<LandingPage lang="en" />} />
       <Route path="/es" element={<LandingPage lang="es" />} />
-      <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/pricing" element={<PricingRedirect />} />
       <Route path="/form/pt" element={<TestePage lang="pt" />} />
       <Route path="/form/en" element={<TestePage lang="en" />} />
       <Route path="/form/es" element={<TestePage lang="es" />} />
