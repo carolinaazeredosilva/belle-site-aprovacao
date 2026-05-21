@@ -21,15 +21,19 @@ type LeadPayload = {
 
 async function sendLeadNotificationEmail(lead: LeadPayload) {
   const resendApiKey = Deno.env.get("RESEND_API_KEY");
-  const toEmailRaw = Deno.env.get("LEAD_NOTIFICATION_TO") ?? "";
+  const toEmailRaw = Deno.env.get("LEAD_NOTIFICATION_TO") ?? "vendas@geinfo.com.br";
   const toEmails = toEmailRaw
     .split(/[;,]/)
     .map((item) => item.trim())
     .filter(Boolean);
   const fromEmail = Deno.env.get("LEAD_NOTIFICATION_FROM") ?? "Belle Leads <onboarding@resend.dev>";
 
-  if (!resendApiKey || toEmails.length === 0) {
-    return { ok: false, code: "EMAIL_CONFIG_MISSING", details: null as string | null };
+  if (!resendApiKey) {
+    return { ok: false, code: "EMAIL_CONFIG_MISSING", details: "Missing RESEND_API_KEY" as string | null };
+  }
+
+  if (toEmails.length === 0) {
+    return { ok: false, code: "EMAIL_CONFIG_MISSING", details: "Missing LEAD_NOTIFICATION_TO" as string | null };
   }
 
   const escapeHtml = (value: string) =>
