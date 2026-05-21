@@ -59,7 +59,7 @@ type Copy = {
   faqTitle: string;
   faq: Array<{ q: string; a: string }>;
   features: Feature[];
-  aiCards: Array<{ title: string; text: string }>;
+  aiCards: Array<{ icon: React.ComponentType<{ size?: number | string; className?: string }>; title: string; text: string }>;
   whatsappBullets: string[];
   appClinicBullets: string[];
   appClientBullets: string[];
@@ -287,10 +287,12 @@ const copyByLang: Record<Lang, Copy> = {
     ],
     features: sharedFeatures,
     aiCards: [
-      { title: "BelleChat IA", text: "Atenda com IA ou humano em uma plataforma centralizada, rápida e eficiente." },
-      { title: "Gestor IA", text: "Faça perguntas e receba respostas rápidas sem abrir relatórios." },
-      { title: "IA Básica", text: "Fale com o sistema e organize anamnese, registros e informações no CRM." },
-      { title: "IA Avançada", text: "Análises inteligentes e lançamento de despesas para decisões mais seguras." }
+      { icon: FileCheck2, title: "IA no prontuário", text: "Organize evoluções, histórico clínico e dados do paciente com apoio inteligente." },
+      { icon: MessageCircleMore, title: "IA no atendimento", text: "Acelere respostas, reduza tempo operacional e melhore a experiência de atendimento." },
+      { icon: Users, title: "IA no CRM", text: "Priorize oportunidades e relacionamento com pacientes com recomendações automatizadas." },
+      { icon: BarChart3, title: "IA nos relatórios", text: "Receba insights claros sobre desempenho, produtividade e metas da clínica." },
+      { icon: Coins, title: "IA no financeiro", text: "Apoio inteligente para acompanhar despesas, faturamento e previsibilidade de caixa." },
+      { icon: UserCog, title: "Assistente de gestão com IA", text: "Tenha um assistente estratégico para apoiar decisões do dia a dia da operação." }
     ],
     whatsappBullets: [
       "Confirmações automáticas",
@@ -343,10 +345,12 @@ const copyByLang: Record<Lang, Copy> = {
     ],
     features: sharedFeaturesEn,
     aiCards: [
-      { title: "BelleChat AI", text: "Serve with AI or human support in one centralized channel." },
-      { title: "AI Manager", text: "Ask questions and get quick answers without opening reports." },
-      { title: "Basic AI", text: "Speak to the system and organize forms and records in CRM." },
-      { title: "Advanced AI", text: "Smart analysis and expense launches for safer decisions." }
+      { icon: FileCheck2, title: "AI in medical records", text: "Organize clinical notes, patient history and records with intelligent assistance." },
+      { icon: MessageCircleMore, title: "AI in service", text: "Speed up responses, reduce operational time and improve service quality." },
+      { icon: Users, title: "AI in CRM", text: "Prioritize opportunities and patient relationships with automated recommendations." },
+      { icon: BarChart3, title: "AI in reports", text: "Get clear insights about performance, productivity and clinic goals." },
+      { icon: Coins, title: "AI in finance", text: "Smart support to track expenses, revenue and cash-flow predictability." },
+      { icon: UserCog, title: "AI management assistant", text: "Use an AI assistant to support daily operational and management decisions." }
     ],
     whatsappBullets: ["Automatic confirmations", "Smart reminders", "Automated billing", "Client reactivation", "Revenue campaigns"],
     appClinicBullets: ["Finance", "Scheduling", "Registrations", "Service Desk", "Plan Sales", "Indicators (BSC)"],
@@ -393,10 +397,12 @@ const copyByLang: Record<Lang, Copy> = {
     ],
     features: sharedFeaturesEs,
     aiCards: [
-      { title: "BelleChat IA", text: "Atiende con IA o humano en un canal centralizado." },
-      { title: "Gestor IA", text: "Haz preguntas y recibe respuestas rápidas sin abrir reportes." },
-      { title: "IA Básica", text: "Habla con el sistema y organiza fichas y registros en el CRM." },
-      { title: "IA Avanzada", text: "Análisis inteligente y gastos para decisiones más seguras." }
+      { icon: FileCheck2, title: "IA en historial clínico", text: "Organiza evoluciones, historial y datos del paciente con apoyo inteligente." },
+      { icon: MessageCircleMore, title: "IA en la atención", text: "Acelera respuestas, reduce tiempo operativo y mejora la atención al cliente." },
+      { icon: Users, title: "IA en CRM", text: "Prioriza oportunidades y relación con pacientes con recomendaciones automáticas." },
+      { icon: BarChart3, title: "IA en informes", text: "Obtén insights claros sobre desempeño, productividad y metas de la clínica." },
+      { icon: Coins, title: "IA en finanzas", text: "Soporte inteligente para seguir gastos, ingresos y previsión de caja." },
+      { icon: UserCog, title: "Asistente de gestión con IA", text: "Cuenta con un asistente estratégico para decisiones diarias de la operación." }
     ],
     whatsappBullets: ["Confirmaciones automáticas", "Recordatorios inteligentes", "Cobros automatizados", "Reactivación de clientes", "Campañas que generan ingresos"],
     appClinicBullets: ["Finanzas", "Agenda", "Registros", "Panel de atencion", "Venta de planes", "Indicadores (BSC)"],
@@ -588,8 +594,8 @@ export function LandingPage({ lang }: { lang: Lang }) {
 
   return (
     <Layout lang={lang}>
-      <main className="mx-auto w-full max-w-[1360px] px-3 pb-14 pt-10 md:px-4">
-        <section id="inicio" className="grid items-center gap-10 rounded-3xl bg-gradient-to-b from-white to-[#FFE7F8] p-6 md:grid-cols-2 md:p-10">
+      <main className="w-full px-2 pb-14 pt-10 md:px-3">
+        <section id="inicio" className="mx-auto w-full max-w-[1360px] grid items-center gap-10 rounded-3xl bg-gradient-to-b from-white to-[#FFE7F8] p-6 md:grid-cols-2 md:p-10">
           <div>
             <motion.h1 initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="text-[38px] font-bold leading-[1.08] text-[#233c5e] md:text-[55px] md:leading-[60px]">
               {lang === "pt" ? (
@@ -646,8 +652,15 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        <section className="mt-14">
-          <h2 className="text-center text-[27px] font-bold text-[#24364f] md:text-[38px]">{t.trustTitle}</h2>
+        <section className="mx-auto mt-14 w-full max-w-[1240px]">
+          <h2 className="text-center text-[27px] font-bold md:text-[38px]">
+            <span
+              className="bg-clip-text text-transparent"
+              style={{ backgroundImage: "linear-gradient(90deg, #A11176, #F2295B)" }}
+            >
+              {t.trustTitle}
+            </span>
+          </h2>
           <div className="mt-6 grid grid-cols-2 gap-4 rounded-2xl border border-[#A1117620] bg-white p-5 md:grid-cols-4">
             {logoUrls.map((src) => (
               <div key={src} className="flex h-20 items-center justify-center rounded-xl border border-[#ece6f4] bg-white px-4">
@@ -657,7 +670,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        <section className="mt-12 grid gap-4 rounded-2xl bg-[#f8f2fb] p-5 md:grid-cols-4">
+        <section className="mx-auto mt-12 grid w-full max-w-[1180px] gap-4 rounded-2xl bg-[#f8f2fb] p-5 md:grid-cols-4">
           {[
             { number: "+30K", label: ui.kpis[0] },
             { number: "+40M", label: ui.kpis[1] },
@@ -671,7 +684,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
           ))}
         </section>
 
-        <section className="mt-16 grid items-center gap-8 rounded-3xl border border-[#eedaf2] bg-white p-8 md:grid-cols-2">
+        <section className="mx-auto mt-16 grid w-full max-w-[1360px] items-center gap-8 rounded-3xl border border-[#eedaf2] bg-white p-8 md:grid-cols-2">
           <div>
             <h2 className="text-[27px] font-bold text-[#2a2a2a] md:text-[38px]">
               {lang === "pt" ? (
@@ -718,7 +731,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        <section id="funcionalidades" className="mt-16">
+        <section id="funcionalidades" className="mx-auto mt-16 w-full max-w-[1360px] rounded-3xl bg-[#fff6fc] p-6 md:p-8">
           <h2 className="text-center text-[27px] font-bold leading-[1.2] text-[#2a2a2a] md:text-[38px]">
             {lang === "pt" ? (
               <>
@@ -749,34 +762,48 @@ export function LandingPage({ lang }: { lang: Lang }) {
             )}
           </h2>
           <p className="mx-auto mt-3 max-w-3xl text-center text-[15px] font-medium leading-[1.5] text-[#4e4e4e] md:text-[17px]">{t.featuresSubtitle}</p>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
+          <div className="mt-7 grid gap-3 md:grid-cols-4">
             {t.features.map((item) => {
               const Icon = item.icon;
               return (
-                <motion.article key={item.title} whileHover={{ y: -2 }} className="min-h-[220px] rounded-[20px] border border-[#A1117629] bg-white px-5 pb-5 pt-3">
-                  <Icon className="text-[#A11176]" size={15} />
-                  <h3 className="mt-3 text-[17px] font-semibold leading-[21px] text-[#2a2a2a]">{item.title}</h3>
-                  <p className="mt-2 text-[15px] font-semibold leading-[20px] text-[#A11176]">{item.subtitle}</p>
-                  <p className="mt-2 text-[15px] font-medium leading-[24px] text-[#4e4e4e]">{item.text}</p>
+                <motion.article key={item.title} whileHover={{ y: -2 }} className="min-h-[170px] rounded-[16px] border border-[#A1117629] bg-white px-3.5 pb-3.5 pt-3 md:min-h-[160px]">
+                  <div className="flex items-center gap-2">
+                    <Icon className="shrink-0 text-[#A11176]" size={14} />
+                    <h3 className="text-[15px] font-semibold leading-[19px] text-[#2a2a2a]">{item.title}</h3>
+                  </div>
+                  <p className="mt-1.5 text-[14px] font-semibold leading-[19px] text-[#A11176]">{item.subtitle}</p>
+                  <p className="mt-1 text-[13px] font-medium leading-[20px] text-[#4e4e4e]">{item.text}</p>
                 </motion.article>
               );
             })}
           </div>
         </section>
 
-        <section className="mt-16 rounded-3xl bg-[#f8f2fb] p-8">
+        <section className="mx-auto mt-16 w-full max-w-[1360px] rounded-3xl bg-[#f8f2fb] p-8">
           <h2 className="text-center text-[27px] font-bold md:text-[38px]">
-            <span
-              className="bg-clip-text text-transparent"
-              style={{ backgroundImage: "linear-gradient(90deg, #A11176, #F2295B)" }}
-            >
-              {t.solutionsTitle}
-            </span>
+            {lang === "pt" ? (
+              <>
+                Tudo que você precisa em um{" "}
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{ backgroundImage: "linear-gradient(90deg, #A11176, #F2295B)" }}
+                >
+                  único sistema para clínicas de estética
+                </span>
+              </>
+            ) : (
+              <span
+                className="bg-clip-text text-transparent"
+                style={{ backgroundImage: "linear-gradient(90deg, #A11176, #F2295B)" }}
+              >
+                {t.solutionsTitle}
+              </span>
+            )}
           </h2>
           <p className="mx-auto mt-3 max-w-3xl text-center text-[15px] font-medium text-[#4e4e4e] md:text-[17px]">{t.solutionsSubtitle}</p>
           <div className="mt-8 rounded-2xl border border-[#e9d9ee] bg-white p-5">
             <div className="grid items-center gap-6 md:grid-cols-[1fr_auto]">
-              <img src={activeSolution.image} alt={activeSolution.title} className="w-full rounded-xl" />
+              <img src={activeSolution.image} alt={activeSolution.title} className="mx-auto w-full max-w-[64%] rounded-xl md:max-w-[37%]" />
               <div className="flex items-center justify-center gap-3 md:flex-col">
                 <button type="button" onClick={prevSolution} className="rounded-full border border-[#e1cfe7] p-2 text-[#A11176] transition hover:bg-[#fdf4fb]" aria-label={ui.prevFeatureAria}>
                   <ChevronLeft size={20} />
@@ -811,14 +838,15 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        <section className="mt-16 rounded-3xl bg-[#41042F] p-8 text-white md:p-10">
+        <section className="mx-auto mt-16 w-full max-w-[1360px] rounded-3xl bg-[#41042F] px-5 py-5 text-white md:px-7 md:py-6">
+          <div className="mx-auto max-w-4xl">
           <div className="flex justify-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#A11176] to-[#d21188] px-5 py-2 text-sm font-medium text-white">
               <Sparkles size={14} />
               <span>{t.aiEyebrow}</span>
             </div>
           </div>
-          <h2 className="mx-auto mt-4 max-w-3xl text-center text-[27px] font-bold leading-[1.2] md:text-[55px] md:leading-[60px]">
+          <h2 className="mx-auto mt-3 max-w-3xl text-center text-[24px] font-bold leading-[1.2] md:text-[38px] md:leading-[1.1]">
             {lang === "pt" ? (
               <>
                 <span className="text-[#00FFF5]">Inteligência Artificial</span> integrada à rotina da sua clínica de estética
@@ -835,24 +863,32 @@ export function LandingPage({ lang }: { lang: Lang }) {
               t.aiTitle
             )}
           </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-center text-[15px] font-medium text-white/85 md:text-[17px]">{t.aiText}</p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <p className="mx-auto mt-3 max-w-3xl text-center text-[14px] font-medium leading-[1.5] text-white/85 md:text-[16px]">{t.aiText}</p>
+          <div className="mt-5 grid grid-cols-1 gap-2.5 md:grid-cols-2 md:gap-3">
             {t.aiCards.map((item) => (
-              <article key={item.title} className="rounded-2xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
-                  <h3 className="text-[22px] font-semibold text-[#00FFF5]">{item.title}</h3>
-                <p className="mt-1 text-[15px] font-medium leading-[1.4] text-white/85 md:text-[17px]">{item.text}</p>
+              <article key={item.title} className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-sm md:min-h-[120px]">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#d7fffb] text-[#00EDE2]">
+                    <item.icon size={17} />
+                  </span>
+                  <h3 className="text-[18px] font-semibold leading-[1.15] text-[#00FFF5] md:text-[21px]">{item.title}</h3>
+                </div>
+                <p className="mt-2 text-[14px] font-medium leading-[1.35] text-white/85 md:text-[15px]">{item.text}</p>
               </article>
             ))}
           </div>
-          <p className="mt-6 text-[16px] font-medium text-white/90 md:text-[17px]">{ui.aiFooter}</p>
-          <a href={trialPath} className="mt-6 inline-block rounded-xl bg-white px-6 py-3 text-[16px] font-bold text-[#A11176]">{ui.aiButton}</a>
+          <p className="mt-5 text-center text-[15px] font-medium text-white/90 md:text-[16px]">{ui.aiFooter}</p>
+          <div className="mt-5 flex justify-center">
+            <a href={trialPath} className="inline-block rounded-xl bg-white px-6 py-3 text-[16px] font-bold text-[#A11176]">{ui.aiButton}</a>
+          </div>
+          </div>
         </section>
 
-        <section className="mt-16 grid items-center gap-8 rounded-3xl border border-[#A1117626] bg-[#fff6fc] p-6 md:grid-cols-2 md:p-8">
-          <img src="https://www.bellesoftware.com.br/wp-content/uploads/2026/03/Integracao-whatsapp-belle-software-6.png.webp" alt="Integracao WhatsApp Belle Software" className="w-full rounded-2xl" />
+        <section className="mx-auto mt-16 grid w-full max-w-[1360px] items-center gap-8 rounded-3xl border border-[#A1117626] bg-[#fff6fc] p-6 md:grid-cols-2 md:p-8">
+          <img src="https://www.bellesoftware.com.br/wp-content/uploads/2026/03/Integracao-whatsapp-belle-software-6.png.webp" alt="Integracao WhatsApp Belle Software" className="mx-auto w-[75%] rounded-2xl" />
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-[#f8ddeb] px-4 py-1 text-[14px] font-semibold text-[#A11176]">WhatsApp</p>
-            <h2 className="mt-4 text-[27px] font-bold leading-[1.15] text-[#1f2438] md:text-[50px] md:leading-[1.1]">
+            <h2 className="mt-4 text-[23px] font-bold leading-[1.18] text-[#1f2438] md:text-[44px] md:leading-[1.1]">
               {lang === "pt" ? (
                 <>
                   Transforme o WhatsApp no{" "}
@@ -878,7 +914,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
                 </>
               )}
             </h2>
-            <p className="mt-4 text-[20px] font-semibold leading-[1.3] text-[#A11176] md:text-[27px] md:leading-[1.3]">
+            <p className="mt-4 text-[17px] font-semibold leading-[1.35] text-[#A11176] md:text-[23px] md:leading-[1.3]">
               {t.whatsappSubtitle}
             </p>
             <div className="mt-6 space-y-2.5">
@@ -887,7 +923,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#f5cfe4] text-[#A11176]">
                     <MessageCircleMore size={18} />
                   </span>
-                  <p className="text-[17px] font-medium text-[#343b4d] md:text-[17px]">{item}</p>
+                  <p className="text-[16px] font-medium text-[#343b4d] md:text-[17px]">{item}</p>
                 </div>
               ))}
             </div>
@@ -895,7 +931,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        <section className="mt-16 rounded-3xl bg-white p-8">
+        <section className="mx-auto mt-16 w-full max-w-[1360px] rounded-3xl bg-white p-8">
           <h2 className="text-center text-[27px] font-bold text-[#2a2a2a] md:text-[50px]">
             {lang === "pt" ? (
               <>
@@ -955,7 +991,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        <section className="mt-16">
+        <section className="mx-auto mt-16 w-full max-w-[1360px]">
           <h2 className="text-center text-[27px] font-bold text-[#2a2a2a] md:text-[38px]">
             {lang === "pt" ? (
               <>
@@ -986,7 +1022,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        <section className="mt-16 rounded-3xl border border-[#A1117626] bg-[#fff6fc] p-8 md:p-10">
+        <section className="mx-auto mt-16 w-full max-w-[1360px] rounded-3xl border border-[#A1117626] bg-[#fff6fc] p-8 md:p-10">
           <h2 className="mx-auto max-w-5xl text-center text-[27px] font-bold leading-[1.15] text-[#234469] md:text-[45px] md:leading-[1.12]">
             {lang === "pt" ? (
               <>
@@ -1053,14 +1089,14 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        <section className="mt-16 rounded-3xl bg-gradient-to-r from-[#A11176] to-[#F2295B] px-8 py-12 text-center text-white">
+        <section className="mx-auto mt-16 w-full max-w-[1360px] rounded-3xl bg-gradient-to-r from-[#A11176] to-[#F2295B] px-8 py-12 text-center text-white">
           <h2 className="text-[27px] font-bold md:text-[38px]">{t.ctaTitle}</h2>
           <p className="mx-auto mt-3 max-w-3xl text-[15px] font-medium text-white/90 md:text-[17px]">{t.ctaText}</p>
           <a href={trialPath} className="mt-7 inline-block rounded-xl bg-white px-8 py-3 text-[16px] font-bold text-[#A11176]">{ui.finalButton}</a>
           <p className="mt-3 text-[14px] text-white/85">{ui.finalFootnote}</p>
         </section>
 
-        <section className="mt-16">
+        <section className="mx-auto mt-16 w-full max-w-[1360px]">
           <h2 className="text-center text-[27px] font-bold text-[#2a2a2a] md:text-[45px]">
             {lang === "pt" ? (
               <>
@@ -1082,7 +1118,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
                 <button
                   type="button"
                   onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
-                  className="flex w-full items-center gap-[9px] rounded-t-[30px] bg-[#ffe7f8] px-5 py-4 text-left text-[16px] font-semibold leading-[1.35] text-[#A11176] transition-all duration-200 ease-out active:scale-[0.995]"
+                  className="flex w-full items-center gap-[9px] rounded-t-[30px] border-0 bg-[#ffe7f8] px-5 py-4 text-left text-[16px] font-semibold leading-[1.35] text-[#A11176] outline-none transition-all duration-200 ease-out active:scale-[0.995] focus:outline-none focus-visible:outline-none"
                 >
                   <span className="text-[15px] font-bold text-[#A11176]">{openFaqIndex === idx ? "−" : "+"}</span>
                   <span>{item.q}</span>
@@ -1105,7 +1141,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        <section className="mt-14 rounded-3xl border border-[#efd8ea] bg-gradient-to-r from-[#fff5fc] to-[#f7f4ff] p-6 md:p-8">
+        <section className="mx-auto mt-14 w-full max-w-[1360px] rounded-3xl border border-[#efd8ea] bg-gradient-to-r from-[#fff5fc] to-[#f7f4ff] p-6 md:p-8">
           <h2 className="text-center text-[27px] font-bold text-[#2a2a2a] md:text-[38px]">
             {lang === "pt" ? (
               <>
@@ -1136,7 +1172,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <a href={WHATSAPP_URL} target="_blank" rel="noreferrer" className="rounded-2xl border border-[#e7d4ea] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md">
               <p className="text-[14px] font-semibold text-[#A11176]">WhatsApp</p>
-              <p className="mt-1 text-[18px] font-bold text-[#2a2a2a]">(11) 3230-5180</p>
+              <p className="mt-1 text-[18px] font-bold text-[#2a2a2a]">+55 (11) 3230-5180</p>
               <p className="mt-2 text-[15px] font-medium text-[#5b5b6b]">{ui.contactWhatsApp}</p>
             </a>
             <a href="tel:08006460099" className="rounded-2xl border border-[#e7d4ea] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md">

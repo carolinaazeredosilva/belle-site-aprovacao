@@ -4,10 +4,26 @@ import { PricingPage } from "./pages/PricingPage";
 import { TestePage } from "./pages/TestePage";
 import { TermsPage } from "./pages/TermsPage";
 
+function detectBrowserLangPath() {
+  const raw = (navigator.language || "pt").toLowerCase();
+  if (raw.startsWith("es")) return "/es";
+  if (raw.startsWith("en")) return "/en";
+  return "/";
+}
+
 export function App() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage lang="pt" />} />
+      <Route
+        path="/"
+        element={
+          detectBrowserLangPath() === "/" ? (
+            <LandingPage lang="pt" />
+          ) : (
+            <Navigate to={detectBrowserLangPath()} replace />
+          )
+        }
+      />
       <Route path="/en" element={<LandingPage lang="en" />} />
       <Route path="/es" element={<LandingPage lang="es" />} />
       <Route path="/pricing" element={<PricingPage />} />

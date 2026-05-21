@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronDown, Eye, EyeOff } from "lucide-react";
 import { WHATSAPP_URL } from "../lib/content";
 import { getSupabaseClient } from "../lib/supabase";
 
@@ -17,6 +18,7 @@ type Copy = {
   labels: {
     fullName: string;
     phone: string;
+    phoneCode: string;
     professionalsRange: string;
     country: string;
     state: string;
@@ -24,6 +26,8 @@ type Copy = {
     email: string;
     password: string;
     confirmPassword: string;
+    showPassword: string;
+    hidePassword: string;
     terms: string;
     termsLink: string;
     button: string;
@@ -39,6 +43,154 @@ type Copy = {
   sideItems: Array<{ title: string; text: string }>;
   sideMore: string;
   sideFinal: string;
+  countries: string[];
+};
+
+const statesByCountry: Record<string, string[]> = {
+  Brasil: [
+    "Acre (AC)",
+    "Alagoas (AL)",
+    "Amapá (AP)",
+    "Amazonas (AM)",
+    "Bahia (BA)",
+    "Ceará (CE)",
+    "Distrito Federal (DF)",
+    "Espírito Santo (ES)",
+    "Goiás (GO)",
+    "Maranhão (MA)",
+    "Mato Grosso (MT)",
+    "Mato Grosso do Sul (MS)",
+    "Minas Gerais (MG)",
+    "Pará (PA)",
+    "Paraíba (PB)",
+    "Paraná (PR)",
+    "Pernambuco (PE)",
+    "Piauí (PI)",
+    "Rio de Janeiro (RJ)",
+    "Rio Grande do Norte (RN)",
+    "Rio Grande do Sul (RS)",
+    "Rondônia (RO)",
+    "Roraima (RR)",
+    "Santa Catarina (SC)",
+    "São Paulo (SP)",
+    "Sergipe (SE)",
+    "Tocantins (TO)",
+  ],
+  Brazil: [
+    "Acre (AC)",
+    "Alagoas (AL)",
+    "Amapá (AP)",
+    "Amazonas (AM)",
+    "Bahia (BA)",
+    "Ceará (CE)",
+    "Distrito Federal (DF)",
+    "Espírito Santo (ES)",
+    "Goiás (GO)",
+    "Maranhão (MA)",
+    "Mato Grosso (MT)",
+    "Mato Grosso do Sul (MS)",
+    "Minas Gerais (MG)",
+    "Pará (PA)",
+    "Paraíba (PB)",
+    "Paraná (PR)",
+    "Pernambuco (PE)",
+    "Piauí (PI)",
+    "Rio de Janeiro (RJ)",
+    "Rio Grande do Norte (RN)",
+    "Rio Grande do Sul (RS)",
+    "Rondônia (RO)",
+    "Roraima (RR)",
+    "Santa Catarina (SC)",
+    "São Paulo (SP)",
+    "Sergipe (SE)",
+    "Tocantins (TO)",
+  ],
+  "Estados Unidos": [
+    "California",
+    "Florida",
+    "New York",
+    "Texas",
+    "Washington",
+  ],
+  "United States": [
+    "California",
+    "Florida",
+    "New York",
+    "Texas",
+    "Washington",
+  ],
+  México: ["Ciudad de México", "Jalisco", "Nuevo León", "Puebla", "Yucatán"],
+  Mexico: ["Ciudad de México", "Jalisco", "Nuevo León", "Puebla", "Yucatán"],
+  Argentina: ["Buenos Aires", "Córdoba", "Mendoza", "Santa Fe", "Tucumán"],
+  Chile: ["Antofagasta", "Biobío", "Metropolitana", "Valparaíso", "Los Lagos"],
+  Colômbia: ["Antioquia", "Bogotá D.C.", "Cundinamarca", "Santander", "Valle del Cauca"],
+  Colombia: ["Antioquia", "Bogotá D.C.", "Cundinamarca", "Santander", "Valle del Cauca"],
+  Espanha: ["Andalucía", "Cataluña", "Comunidad de Madrid", "Galicia", "Valencia"],
+  Spain: ["Andalucía", "Cataluña", "Comunidad de Madrid", "Galicia", "Valencia"],
+  Portugal: ["Aveiro", "Braga", "Coimbra", "Lisboa", "Porto"],
+  Canadá: ["Alberta", "British Columbia", "Ontario", "Quebec", "Manitoba"],
+  Canada: ["Alberta", "British Columbia", "Ontario", "Quebec", "Manitoba"],
+};
+
+const citiesByState: Record<string, string[]> = {
+  "Acre (AC)": ["Rio Branco", "Cruzeiro do Sul", "Sena Madureira"],
+  "Alagoas (AL)": ["Maceió", "Arapiraca", "Palmeira dos Índios"],
+  "Amapá (AP)": ["Macapá", "Santana", "Laranjal do Jari"],
+  "Amazonas (AM)": ["Manaus", "Parintins", "Itacoatiara"],
+  "Bahia (BA)": ["Salvador", "Feira de Santana", "Vitória da Conquista"],
+  "Ceará (CE)": ["Fortaleza", "Caucaia", "Juazeiro do Norte"],
+  "Distrito Federal (DF)": ["Brasília", "Taguatinga", "Ceilândia"],
+  "Espírito Santo (ES)": ["Vitória", "Vila Velha", "Serra"],
+  "Goiás (GO)": ["Goiânia", "Aparecida de Goiânia", "Anápolis"],
+  "Maranhão (MA)": ["São Luís", "Imperatriz", "Caxias"],
+  "Mato Grosso (MT)": ["Cuiabá", "Várzea Grande", "Rondonópolis"],
+  "Mato Grosso do Sul (MS)": ["Campo Grande", "Dourados", "Três Lagoas"],
+  "Minas Gerais (MG)": ["Belo Horizonte", "Uberlândia", "Contagem"],
+  "Pará (PA)": ["Belém", "Ananindeua", "Santarém"],
+  "Paraíba (PB)": ["João Pessoa", "Campina Grande", "Santa Rita"],
+  "Paraná (PR)": ["Curitiba", "Londrina", "Maringá"],
+  "Pernambuco (PE)": ["Recife", "Jaboatão dos Guararapes", "Olinda"],
+  "Piauí (PI)": ["Teresina", "Parnaíba", "Picos"],
+  "Rio de Janeiro (RJ)": ["Rio de Janeiro", "Niterói", "Duque de Caxias"],
+  "Rio Grande do Norte (RN)": ["Natal", "Mossoró", "Parnamirim"],
+  "Rio Grande do Sul (RS)": ["Porto Alegre", "Caxias do Sul", "Pelotas"],
+  "Rondônia (RO)": ["Porto Velho", "Ji-Paraná", "Ariquemes"],
+  "Roraima (RR)": ["Boa Vista", "Rorainópolis", "Caracaraí"],
+  "Santa Catarina (SC)": ["Florianópolis", "Joinville", "Blumenau"],
+  "São Paulo (SP)": ["São Paulo", "Campinas", "Santos"],
+  "Sergipe (SE)": ["Aracaju", "Nossa Senhora do Socorro", "Lagarto"],
+  "Tocantins (TO)": ["Palmas", "Araguaína", "Gurupi"],
+};
+
+const countryApiNameMap: Record<string, string> = {
+  "Estados Unidos": "United States",
+  "España": "Spain",
+  "México": "Mexico",
+  "Canadá": "Canada",
+  "Japón": "Japan",
+  "Perú": "Peru",
+  "Reino Unido": "United Kingdom",
+  "Espanha": "Spain",
+  "Alemanha": "Germany",
+  "França": "France",
+  "Itália": "Italy",
+  "Japão": "Japan",
+  "Colômbia": "Colombia",
+  "Peru": "Peru",
+  "Paraguai": "Paraguay",
+  "Uruguai": "Uruguay",
+  "Brasil": "Brazil",
+};
+
+const phoneFlagByCode: Record<string, string> = {
+  "+55": "https://flagcdn.com/w20/br.png",
+  "+1": "https://flagcdn.com/w20/us.png",
+  "+34": "https://flagcdn.com/w20/es.png",
+  "+52": "https://flagcdn.com/w20/mx.png",
+  "+54": "https://flagcdn.com/w20/ar.png",
+  "+56": "https://flagcdn.com/w20/cl.png",
+  "+57": "https://flagcdn.com/w20/co.png",
+  "+351": "https://flagcdn.com/w20/pt.png",
 };
 
 const copyByLang: Record<TestePageLanguage, Copy> = {
@@ -52,6 +204,7 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
     labels: {
       fullName: "Nome",
       phone: "Celular",
+      phoneCode: "DDI",
       professionalsRange: "Quantos profissionais atendem na sua clínica?",
       country: "País",
       state: "Estado",
@@ -59,6 +212,8 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
       email: "E-mail",
       password: "Crie uma senha",
       confirmPassword: "Confirme a sua senha",
+      showPassword: "Mostrar senha",
+      hidePassword: "Ocultar senha",
       terms: "Li e aceito os",
       termsLink: "Termos e Condições",
       button: "Começar o meu teste gratuito",
@@ -84,6 +239,27 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
     ],
     sideMore: "E muito mais!",
     sideFinal: "Transforme sua gestão com o melhor sistema para clínicas de estética!",
+    countries: [
+      "Brasil",
+      "Argentina",
+      "Chile",
+      "Colômbia",
+      "México",
+      "Paraguai",
+      "Peru",
+      "Portugal",
+      "Uruguai",
+      "Estados Unidos",
+      "Canadá",
+      "Espanha",
+      "França",
+      "Itália",
+      "Alemanha",
+      "Reino Unido",
+      "Japão",
+      "China",
+      "Austrália",
+    ],
   },
   en: {
     title: "Optimize your clinic management",
@@ -95,6 +271,7 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
     labels: {
       fullName: "Name",
       phone: "Cell phone",
+      phoneCode: "Code",
       professionalsRange: "How many professionals work at your clinic?",
       country: "Country",
       state: "State",
@@ -102,6 +279,8 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
       email: "Email",
       password: "Create a password",
       confirmPassword: "Confirm your password",
+      showPassword: "Show password",
+      hidePassword: "Hide password",
       terms: "I have read and accept the",
       termsLink: "Terms and Conditions",
       button: "Start my free trial",
@@ -127,6 +306,27 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
     ],
     sideMore: "And much more!",
     sideFinal: "Transform your management with the best software for aesthetic clinics!",
+    countries: [
+      "Brazil",
+      "Argentina",
+      "Chile",
+      "Colombia",
+      "Mexico",
+      "Paraguay",
+      "Peru",
+      "Portugal",
+      "Uruguay",
+      "United States",
+      "Canada",
+      "Spain",
+      "France",
+      "Italy",
+      "Germany",
+      "United Kingdom",
+      "Japan",
+      "China",
+      "Australia",
+    ],
   },
   es: {
     title: "Optimiza la gestión de tu clínica",
@@ -138,6 +338,7 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
     labels: {
       fullName: "Nombre",
       phone: "Celular",
+      phoneCode: "Código",
       professionalsRange: "¿Cuántos profesionales trabajan en tu clínica?",
       country: "País",
       state: "Estado",
@@ -145,6 +346,8 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
       email: "Correo electrónico",
       password: "Crea una contraseña",
       confirmPassword: "Confirma tu contraseña",
+      showPassword: "Mostrar contraseña",
+      hidePassword: "Ocultar contraseña",
       terms: "He leído y acepto los",
       termsLink: "Términos y Condiciones",
       button: "Comenzar mi prueba gratis",
@@ -170,6 +373,27 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
     ],
     sideMore: "¡Y mucho más!",
     sideFinal: "¡Transforma tu gestión con el mejor sistema para clínicas estéticas!",
+    countries: [
+      "Brasil",
+      "Argentina",
+      "Chile",
+      "Colombia",
+      "México",
+      "Paraguay",
+      "Perú",
+      "Portugal",
+      "Uruguay",
+      "Estados Unidos",
+      "Canadá",
+      "España",
+      "Francia",
+      "Italia",
+      "Alemania",
+      "Reino Unido",
+      "Japón",
+      "China",
+      "Australia",
+    ],
   },
 };
 
@@ -179,14 +403,23 @@ const termsPathByLang: Record<TestePageLanguage, string> = {
   es: "/terminos-y-condiciones",
 };
 
-function schema(labels: Copy["labels"]) {
+const sourceLabelByLang: Record<TestePageLanguage, string> = {
+  pt: "Site em português",
+  en: "Site em inglês",
+  es: "Site em espanhol",
+};
+
+function schema(lang: TestePageLanguage, labels: Copy["labels"]) {
+  const stateRule = lang === "pt" ? z.string().min(2, labels.required) : z.string().optional().default("");
+
   return z
     .object({
       fullName: z.string().min(2, labels.required),
+      phoneCode: z.string().min(1, labels.required),
       phone: z.string().min(8, labels.required),
       professionalsRange: z.string().min(1, labels.required),
       country: z.string().min(2, labels.required),
-      state: z.string().min(2, labels.required),
+      state: stateRule,
       city: z.string().min(2, labels.required),
       email: z.string().email(labels.invalidEmail),
       password: z.string().min(8, labels.passwordMin),
@@ -201,6 +434,7 @@ function schema(labels: Copy["labels"]) {
 
 type FormValues = {
   fullName: string;
+  phoneCode: string;
   phone: string;
   professionalsRange: string;
   country: string;
@@ -216,17 +450,111 @@ export function TestePage({ lang = "pt" }: { lang?: TestePageLanguage }) {
   const copy = copyByLang[lang];
   const [sent, setSent] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const formSchema = useMemo(() => schema(copy.labels), [copy.labels]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const formSchema = useMemo(() => schema(lang, copy.labels), [copy.labels, lang]);
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { termsAccepted: false },
+    defaultValues: { termsAccepted: false, phoneCode: "+55" },
   });
+  const selectedCountry = watch("country");
+  const selectedState = watch("state");
+  const selectedPhoneCode = watch("phoneCode");
+  const [cityOptions, setCityOptions] = useState<string[]>([]);
+  const previousCountryRef = useRef<string>("");
+  const previousStateRef = useRef<string>("");
+  const stateOptions = statesByCountry[selectedCountry] ?? [];
+
+  useEffect(() => {
+    const previousCountry = previousCountryRef.current;
+    if (previousCountry && previousCountry !== selectedCountry) {
+      setValue("state", "");
+      setValue("city", "");
+      setCityOptions([]);
+    }
+    previousCountryRef.current = selectedCountry || "";
+  }, [selectedCountry, setValue]);
+
+  useEffect(() => {
+    const previousState = previousStateRef.current;
+    if (previousState && previousState !== selectedState) {
+      setValue("city", "");
+    }
+    previousStateRef.current = selectedState || "";
+  }, [selectedState, setValue]);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadCities = async () => {
+      const fallbackCities = citiesByState[selectedState] ?? [];
+      const ufMatch = selectedState?.match(/\(([A-Z]{2})\)/);
+      const uf = ufMatch?.[1];
+
+      if (!uf) {
+        setCityOptions(fallbackCities);
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
+        if (!response.ok) {
+          setCityOptions(fallbackCities);
+          return;
+        }
+
+        const data: Array<{ nome: string }> = await response.json();
+        const cities = data.map((item) => item.nome).sort((a, b) => a.localeCompare(b, "pt-BR"));
+        if (active) setCityOptions(cities);
+      } catch {
+        if (active) setCityOptions(fallbackCities);
+      }
+    };
+
+    void loadCities();
+    return () => {
+      active = false;
+    };
+  }, [selectedState]);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadCitiesByCountry = async () => {
+      if (lang === "pt" || !selectedCountry) return;
+
+      try {
+        const apiCountryName = countryApiNameMap[selectedCountry] ?? selectedCountry;
+        const response = await fetch("https://countriesnow.space/api/v0.1/countries/cities", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ country: apiCountryName }),
+        });
+
+        if (!response.ok) return;
+        const data: { data?: string[] } = await response.json();
+        const cities = (data.data ?? []).sort((a, b) => a.localeCompare(b));
+        if (active && cities.length > 0) setCityOptions(cities);
+      } catch {
+        // Keep current fallback behavior
+      }
+    };
+
+    void loadCitiesByCountry();
+    return () => {
+      active = false;
+    };
+  }, [lang, selectedCountry]);
 
   const homePath = lang === "en" ? "/en" : lang === "es" ? "/es" : "/";
+  const fieldClass =
+    "w-full rounded-xl border border-[#d8dce6] bg-white px-3 py-2.5 text-[15px] text-[#1f2937] outline-none transition focus:border-[#A11176] focus:ring-2 focus:ring-[#f4c3e4]";
 
   const onSubmit = async (values: FormValues) => {
     setSubmitError("");
@@ -239,10 +567,10 @@ export function TestePage({ lang = "pt" }: { lang?: TestePageLanguage }) {
           city: values.city,
           state: values.state,
           country: values.country,
-          phone: values.phone,
+          phone: `${values.phoneCode} ${values.phone}`.trim(),
           professionalsRange: values.professionalsRange,
           lang,
-          sourcePath: lang === "pt" ? "/form/pt" : `/form/${lang}`,
+          sourcePath: sourceLabelByLang[lang],
           sourceQuery: window.location.search,
         },
       });
@@ -316,46 +644,171 @@ export function TestePage({ lang = "pt" }: { lang?: TestePageLanguage }) {
               <h3 className="text-3xl font-bold text-[#111827]">{copy.formTitle}</h3>
 
               <label className="block text-sm font-medium text-[#111827]">{copy.labels.fullName}</label>
-              <input {...register("fullName")} placeholder={copy.labels.fullName} className="w-full rounded border p-2" />
+              <input {...register("fullName")} placeholder={copy.labels.fullName} className={fieldClass} />
               {errors.fullName && <p className="text-sm text-red-600">{errors.fullName.message}</p>}
 
               <label className="block text-sm font-medium text-[#111827]">{copy.labels.phone}</label>
-              <input {...register("phone")} placeholder={copy.labels.phone} className="w-full rounded border p-2" />
+              <div className="grid grid-cols-[120px_1fr] gap-2">
+                <div className="relative">
+                  <div className="pointer-events-none absolute left-2 top-1/2 z-10 -translate-y-1/2">
+                    <img
+                      src={phoneFlagByCode[selectedPhoneCode] ?? phoneFlagByCode["+55"]}
+                      alt="Bandeira do código"
+                      className="h-4 w-6 rounded-[2px] object-cover"
+                    />
+                  </div>
+                  <select {...register("phoneCode")} className={`${fieldClass} appearance-none pl-10 pr-8`}>
+                    <option value="+55">+55 BR</option>
+                    <option value="+1">+1 US/CA</option>
+                    <option value="+34">+34 ES</option>
+                    <option value="+52">+52 MX</option>
+                    <option value="+54">+54 AR</option>
+                    <option value="+56">+56 CL</option>
+                    <option value="+57">+57 CO</option>
+                    <option value="+351">+351 PT</option>
+                  </select>
+                  <ChevronDown
+                    size={16}
+                    className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#7a4965]"
+                  />
+                </div>
+                <input {...register("phone")} placeholder={copy.labels.phone} className={fieldClass} />
+              </div>
+              {errors.phoneCode && <p className="text-sm text-red-600">{errors.phoneCode.message}</p>}
               {errors.phone && <p className="text-sm text-red-600">{errors.phone.message}</p>}
 
               <label className="block text-sm font-medium text-[#111827]">{copy.labels.professionalsRange}</label>
-              <select {...register("professionalsRange")} className="w-full rounded border p-2">
-                <option value="">{copy.labels.select}</option>
-                {copy.options.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  {...register("professionalsRange")}
+                  className={`${fieldClass} appearance-none pr-10`}
+                >
+                  <option value="">{copy.labels.select}</option>
+                  {copy.options.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  size={18}
+                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#7a4965]"
+                />
+              </div>
               {errors.professionalsRange && <p className="text-sm text-red-600">{errors.professionalsRange.message}</p>}
 
               <label className="block text-sm font-medium text-[#111827]">{copy.labels.country}</label>
-              <input {...register("country")} placeholder={copy.labels.country} className="w-full rounded border p-2" />
+              <div className="relative">
+                <select
+                  {...register("country")}
+                  className={`${fieldClass} appearance-none pr-10`}
+                >
+                  <option value="">{copy.labels.select}</option>
+                  {copy.countries.map((country) => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  size={18}
+                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#7a4965]"
+                />
+              </div>
               {errors.country && <p className="text-sm text-red-600">{errors.country.message}</p>}
 
-              <label className="block text-sm font-medium text-[#111827]">{copy.labels.state}</label>
-              <input {...register("state")} placeholder={copy.labels.state} className="w-full rounded border p-2" />
-              {errors.state && <p className="text-sm text-red-600">{errors.state.message}</p>}
+              {lang === "pt" && (
+                <>
+                  <label className="block text-sm font-medium text-[#111827]">{copy.labels.state}</label>
+                  <div className="relative">
+                    <select
+                      {...register("state")}
+                      className={`${fieldClass} appearance-none pr-10`}
+                    >
+                      <option value="">{copy.labels.select}</option>
+                      {stateOptions.map((state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      size={18}
+                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#7a4965]"
+                    />
+                  </div>
+                  {errors.state && <p className="text-sm text-red-600">{errors.state.message}</p>}
+                </>
+              )}
 
               <label className="block text-sm font-medium text-[#111827]">{copy.labels.city}</label>
-              <input {...register("city")} placeholder={copy.labels.city} className="w-full rounded border p-2" />
+              {cityOptions.length > 0 ? (
+                <div className="relative">
+                  <select
+                    {...register("city")}
+                    className={`${fieldClass} appearance-none pr-10`}
+                  >
+                    <option value="">{copy.labels.select}</option>
+                    {cityOptions.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    size={18}
+                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#7a4965]"
+                  />
+                </div>
+              ) : (
+                <input
+                  {...register("city")}
+                  placeholder={copy.labels.city}
+                  className={fieldClass}
+                />
+              )}
               {errors.city && <p className="text-sm text-red-600">{errors.city.message}</p>}
 
               <label className="block text-sm font-medium text-[#111827]">{copy.labels.email}</label>
-              <input {...register("email")} placeholder={copy.labels.email} className="w-full rounded border p-2" />
+              <input {...register("email")} placeholder={copy.labels.email} className={fieldClass} />
               {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
 
               <label className="block text-sm font-medium text-[#111827]">{copy.labels.password}</label>
-              <input type="password" {...register("password")} placeholder={copy.labels.password} className="w-full rounded border p-2" />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  placeholder={copy.labels.password}
+                  className={`${fieldClass} pr-12`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((value) => !value)}
+                  aria-label={showPassword ? copy.labels.hidePassword : copy.labels.showPassword}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6b7280] hover:text-[#111827]"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               {errors.password && <p className="text-sm text-red-600">{errors.password.message}</p>}
 
               <label className="block text-sm font-medium text-[#111827]">{copy.labels.confirmPassword}</label>
-              <input type="password" {...register("confirmPassword")} placeholder={copy.labels.confirmPassword} className="w-full rounded border p-2" />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  {...register("confirmPassword")}
+                  placeholder={copy.labels.confirmPassword}
+                  className={`${fieldClass} pr-12`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((value) => !value)}
+                  aria-label={showConfirmPassword ? copy.labels.hidePassword : copy.labels.showPassword}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6b7280] hover:text-[#111827]"
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               {errors.confirmPassword && <p className="text-sm text-red-600">{errors.confirmPassword.message}</p>}
 
               <label className="flex items-center gap-2 text-sm text-[#374151]">
