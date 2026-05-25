@@ -599,6 +599,7 @@ export function TestePage({ lang = "pt" }: { lang?: TestePageLanguage }) {
     const payload = {
       fullName: values.fullName,
       email: values.email,
+      password: values.password,
       city: values.city,
       state: values.state,
       country: values.country,

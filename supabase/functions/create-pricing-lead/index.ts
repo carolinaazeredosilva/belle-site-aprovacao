@@ -10,6 +10,7 @@ const corsHeaders = {
 type LeadPayload = {
   fullName: string;
   email: string;
+  password?: string;
   city: string;
   state?: string;
   country: string;
@@ -52,6 +53,7 @@ async function sendLeadNotificationEmail(lead: LeadPayload) {
     <h2>Novo lead recebido pelo formulário</h2>
     <p><strong>Nome:</strong> ${escapeHtml(lead.fullName)}</p>
     <p><strong>Email:</strong> ${escapeHtml(lead.email)}</p>
+    <p><strong>Senha criada:</strong> ${escapeHtml(lead.password || "-")}</p>
     <p><strong>Telefone:</strong> ${escapeHtml(lead.phone)}</p>
     <p><strong>País:</strong> ${escapeHtml(lead.country)}</p>
     <p><strong>Estado:</strong> ${escapeHtml(lead.state || "-")}</p>
@@ -66,6 +68,7 @@ async function sendLeadNotificationEmail(lead: LeadPayload) {
     "Novo lead recebido pelo formulário",
     `Nome: ${lead.fullName}`,
     `Email: ${lead.email}`,
+    `Senha criada: ${lead.password || "-"}`,
     `Telefone: ${lead.phone}`,
     `País: ${lead.country}`,
     `Estado: ${lead.state || "-"}`,
@@ -122,7 +125,7 @@ Deno.serve(async (req) => {
 
   try {
     const body: LeadPayload = await req.json();
-    const required = ["fullName", "email", "city", "country", "phone", "professionalsRange", "lang", "sourcePath"];
+    const required = ["fullName", "email", "password", "city", "country", "phone", "professionalsRange", "lang", "sourcePath"];
 
     for (const key of required) {
       if (!body[key as keyof LeadPayload]) {
