@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,58 +50,58 @@ const statesByCountry: Record<string, string[]> = {
   Brasil: [
     "Acre (AC)",
     "Alagoas (AL)",
-    "Amapá (AP)",
+    "AmapÃ¡ (AP)",
     "Amazonas (AM)",
     "Bahia (BA)",
-    "Ceará (CE)",
+    "CearÃ¡ (CE)",
     "Distrito Federal (DF)",
-    "Espírito Santo (ES)",
-    "Goiás (GO)",
-    "Maranhão (MA)",
+    "EspÃ­rito Santo (ES)",
+    "GoiÃ¡s (GO)",
+    "MaranhÃ£o (MA)",
     "Mato Grosso (MT)",
     "Mato Grosso do Sul (MS)",
     "Minas Gerais (MG)",
-    "Pará (PA)",
-    "Paraíba (PB)",
-    "Paraná (PR)",
+    "ParÃ¡ (PA)",
+    "ParaÃ­ba (PB)",
+    "ParanÃ¡ (PR)",
     "Pernambuco (PE)",
-    "Piauí (PI)",
+    "PiauÃ­ (PI)",
     "Rio de Janeiro (RJ)",
     "Rio Grande do Norte (RN)",
     "Rio Grande do Sul (RS)",
-    "Rondônia (RO)",
+    "RondÃ´nia (RO)",
     "Roraima (RR)",
     "Santa Catarina (SC)",
-    "São Paulo (SP)",
+    "SÃ£o Paulo (SP)",
     "Sergipe (SE)",
     "Tocantins (TO)",
   ],
   Brazil: [
     "Acre (AC)",
     "Alagoas (AL)",
-    "Amapá (AP)",
+    "AmapÃ¡ (AP)",
     "Amazonas (AM)",
     "Bahia (BA)",
-    "Ceará (CE)",
+    "CearÃ¡ (CE)",
     "Distrito Federal (DF)",
-    "Espírito Santo (ES)",
-    "Goiás (GO)",
-    "Maranhão (MA)",
+    "EspÃ­rito Santo (ES)",
+    "GoiÃ¡s (GO)",
+    "MaranhÃ£o (MA)",
     "Mato Grosso (MT)",
     "Mato Grosso do Sul (MS)",
     "Minas Gerais (MG)",
-    "Pará (PA)",
-    "Paraíba (PB)",
-    "Paraná (PR)",
+    "ParÃ¡ (PA)",
+    "ParaÃ­ba (PB)",
+    "ParanÃ¡ (PR)",
     "Pernambuco (PE)",
-    "Piauí (PI)",
+    "PiauÃ­ (PI)",
     "Rio de Janeiro (RJ)",
     "Rio Grande do Norte (RN)",
     "Rio Grande do Sul (RS)",
-    "Rondônia (RO)",
+    "RondÃ´nia (RO)",
     "Roraima (RR)",
     "Santa Catarina (SC)",
-    "São Paulo (SP)",
+    "SÃ£o Paulo (SP)",
     "Sergipe (SE)",
     "Tocantins (TO)",
   ],
@@ -119,63 +119,63 @@ const statesByCountry: Record<string, string[]> = {
     "Texas",
     "Washington",
   ],
-  México: ["Ciudad de México", "Jalisco", "Nuevo León", "Puebla", "Yucatán"],
-  Mexico: ["Ciudad de México", "Jalisco", "Nuevo León", "Puebla", "Yucatán"],
-  Argentina: ["Buenos Aires", "Córdoba", "Mendoza", "Santa Fe", "Tucumán"],
-  Chile: ["Antofagasta", "Biobío", "Metropolitana", "Valparaíso", "Los Lagos"],
-  Colômbia: ["Antioquia", "Bogotá D.C.", "Cundinamarca", "Santander", "Valle del Cauca"],
-  Colombia: ["Antioquia", "Bogotá D.C.", "Cundinamarca", "Santander", "Valle del Cauca"],
-  Espanha: ["Andalucía", "Cataluña", "Comunidad de Madrid", "Galicia", "Valencia"],
-  Spain: ["Andalucía", "Cataluña", "Comunidad de Madrid", "Galicia", "Valencia"],
+  "MÃ©xico": ["Ciudad de MÃ©xico", "Jalisco", "Nuevo LeÃ³n", "Puebla", "YucatÃ¡n"],
+  Mexico: ["Ciudad de MÃ©xico", "Jalisco", "Nuevo LeÃ³n", "Puebla", "YucatÃ¡n"],
+  Argentina: ["Buenos Aires", "CÃ³rdoba", "Mendoza", "Santa Fe", "TucumÃ¡n"],
+  Chile: ["Antofagasta", "BiobÃ­o", "Metropolitana", "ValparaÃ­so", "Los Lagos"],
+  "ColÃ´mbia": ["Antioquia", "BogotÃ¡ D.C.", "Cundinamarca", "Santander", "Valle del Cauca"],
+  Colombia: ["Antioquia", "BogotÃ¡ D.C.", "Cundinamarca", "Santander", "Valle del Cauca"],
+  Espanha: ["AndalucÃ­a", "CataluÃ±a", "Comunidad de Madrid", "Galicia", "Valencia"],
+  Spain: ["AndalucÃ­a", "CataluÃ±a", "Comunidad de Madrid", "Galicia", "Valencia"],
   Portugal: ["Aveiro", "Braga", "Coimbra", "Lisboa", "Porto"],
-  Canadá: ["Alberta", "British Columbia", "Ontario", "Quebec", "Manitoba"],
+  "CanadÃ¡": ["Alberta", "British Columbia", "Ontario", "Quebec", "Manitoba"],
   Canada: ["Alberta", "British Columbia", "Ontario", "Quebec", "Manitoba"],
 };
 
 const citiesByState: Record<string, string[]> = {
   "Acre (AC)": ["Rio Branco", "Cruzeiro do Sul", "Sena Madureira"],
-  "Alagoas (AL)": ["Maceió", "Arapiraca", "Palmeira dos Índios"],
-  "Amapá (AP)": ["Macapá", "Santana", "Laranjal do Jari"],
+  "Alagoas (AL)": ["MaceiÃ³", "Arapiraca", "Palmeira dos Ãndios"],
+  "AmapÃ¡ (AP)": ["MacapÃ¡", "Santana", "Laranjal do Jari"],
   "Amazonas (AM)": ["Manaus", "Parintins", "Itacoatiara"],
-  "Bahia (BA)": ["Salvador", "Feira de Santana", "Vitória da Conquista"],
-  "Ceará (CE)": ["Fortaleza", "Caucaia", "Juazeiro do Norte"],
-  "Distrito Federal (DF)": ["Brasília", "Taguatinga", "Ceilândia"],
-  "Espírito Santo (ES)": ["Vitória", "Vila Velha", "Serra"],
-  "Goiás (GO)": ["Goiânia", "Aparecida de Goiânia", "Anápolis"],
-  "Maranhão (MA)": ["São Luís", "Imperatriz", "Caxias"],
-  "Mato Grosso (MT)": ["Cuiabá", "Várzea Grande", "Rondonópolis"],
-  "Mato Grosso do Sul (MS)": ["Campo Grande", "Dourados", "Três Lagoas"],
-  "Minas Gerais (MG)": ["Belo Horizonte", "Uberlândia", "Contagem"],
-  "Pará (PA)": ["Belém", "Ananindeua", "Santarém"],
-  "Paraíba (PB)": ["João Pessoa", "Campina Grande", "Santa Rita"],
-  "Paraná (PR)": ["Curitiba", "Londrina", "Maringá"],
-  "Pernambuco (PE)": ["Recife", "Jaboatão dos Guararapes", "Olinda"],
-  "Piauí (PI)": ["Teresina", "Parnaíba", "Picos"],
-  "Rio de Janeiro (RJ)": ["Rio de Janeiro", "Niterói", "Duque de Caxias"],
-  "Rio Grande do Norte (RN)": ["Natal", "Mossoró", "Parnamirim"],
+  "Bahia (BA)": ["Salvador", "Feira de Santana", "VitÃ³ria da Conquista"],
+  "CearÃ¡ (CE)": ["Fortaleza", "Caucaia", "Juazeiro do Norte"],
+  "Distrito Federal (DF)": ["BrasÃ­lia", "Taguatinga", "CeilÃ¢ndia"],
+  "EspÃ­rito Santo (ES)": ["VitÃ³ria", "Vila Velha", "Serra"],
+  "GoiÃ¡s (GO)": ["GoiÃ¢nia", "Aparecida de GoiÃ¢nia", "AnÃ¡polis"],
+  "MaranhÃ£o (MA)": ["SÃ£o LuÃ­s", "Imperatriz", "Caxias"],
+  "Mato Grosso (MT)": ["CuiabÃ¡", "VÃ¡rzea Grande", "RondonÃ³polis"],
+  "Mato Grosso do Sul (MS)": ["Campo Grande", "Dourados", "TrÃªs Lagoas"],
+  "Minas Gerais (MG)": ["Belo Horizonte", "UberlÃ¢ndia", "Contagem"],
+  "ParÃ¡ (PA)": ["BelÃ©m", "Ananindeua", "SantarÃ©m"],
+  "ParaÃ­ba (PB)": ["JoÃ£o Pessoa", "Campina Grande", "Santa Rita"],
+  "ParanÃ¡ (PR)": ["Curitiba", "Londrina", "MaringÃ¡"],
+  "Pernambuco (PE)": ["Recife", "JaboatÃ£o dos Guararapes", "Olinda"],
+  "PiauÃ­ (PI)": ["Teresina", "ParnaÃ­ba", "Picos"],
+  "Rio de Janeiro (RJ)": ["Rio de Janeiro", "NiterÃ³i", "Duque de Caxias"],
+  "Rio Grande do Norte (RN)": ["Natal", "MossorÃ³", "Parnamirim"],
   "Rio Grande do Sul (RS)": ["Porto Alegre", "Caxias do Sul", "Pelotas"],
-  "Rondônia (RO)": ["Porto Velho", "Ji-Paraná", "Ariquemes"],
-  "Roraima (RR)": ["Boa Vista", "Rorainópolis", "Caracaraí"],
-  "Santa Catarina (SC)": ["Florianópolis", "Joinville", "Blumenau"],
-  "São Paulo (SP)": ["São Paulo", "Campinas", "Santos"],
+  "RondÃ´nia (RO)": ["Porto Velho", "Ji-ParanÃ¡", "Ariquemes"],
+  "Roraima (RR)": ["Boa Vista", "RorainÃ³polis", "CaracaraÃ­"],
+  "Santa Catarina (SC)": ["FlorianÃ³polis", "Joinville", "Blumenau"],
+  "SÃ£o Paulo (SP)": ["SÃ£o Paulo", "Campinas", "Santos"],
   "Sergipe (SE)": ["Aracaju", "Nossa Senhora do Socorro", "Lagarto"],
-  "Tocantins (TO)": ["Palmas", "Araguaína", "Gurupi"],
+  "Tocantins (TO)": ["Palmas", "AraguaÃ­na", "Gurupi"],
 };
 
 const countryApiNameMap: Record<string, string> = {
   "Estados Unidos": "United States",
-  "España": "Spain",
-  "México": "Mexico",
-  "Canadá": "Canada",
-  "Japón": "Japan",
-  "Perú": "Peru",
+  "EspaÃ±a": "Spain",
+  "MÃ©xico": "Mexico",
+  "CanadÃ¡": "Canada",
+  "JapÃ³n": "Japan",
+  "PerÃº": "Peru",
   "Reino Unido": "United Kingdom",
   "Espanha": "Spain",
   "Alemanha": "Germany",
-  "França": "France",
-  "Itália": "Italy",
-  "Japão": "Japan",
-  "Colômbia": "Colombia",
+  "FranÃ§a": "France",
+  "ItÃ¡lia": "Italy",
+  "JapÃ£o": "Japan",
+  "ColÃ´mbia": "Colombia",
   "Peru": "Peru",
   "Paraguai": "Paraguay",
   "Uruguai": "Uruguay",
@@ -195,8 +195,8 @@ const phoneFlagByCode: Record<string, string> = {
 
 const copyByLang: Record<TestePageLanguage, Copy> = {
   pt: {
-    title: "Otimize o gerenciamento da sua clínica",
-    subtitle: "Experimente gratuitamente os recursos que o melhor sistema para clínicas de estética pode oferecer.",
+    title: "Otimize o gerenciamento da sua clÃ­nica",
+    subtitle: "Experimente gratuitamente os recursos que o melhor sistema para clÃ­nicas de estÃ©tica pode oferecer.",
     backToSite: "Voltar para o site",
     formTitle: "Experimente o Belle Software gratuitamente!",
     success: "Obrigado! Seus dados foram enviados com sucesso.",
@@ -205,8 +205,8 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
       fullName: "Nome",
       phone: "Celular",
       phoneCode: "DDI",
-      professionalsRange: "Quantos profissionais atendem na sua clínica?",
-      country: "País",
+      professionalsRange: "Quantos profissionais atendem na sua clÃ­nica?",
+      country: "PaÃ­s",
       state: "Estado",
       city: "Cidade",
       email: "E-mail",
@@ -215,50 +215,50 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
       showPassword: "Mostrar senha",
       hidePassword: "Ocultar senha",
       terms: "Li e aceito os",
-      termsLink: "Termos e Condições",
-      button: "Começar o meu teste gratuito",
-      required: "Campo obrigatório",
-      invalidEmail: "E-mail inválido",
+      termsLink: "Termos e CondiÃ§Ãµes",
+      button: "ComeÃ§ar o meu teste gratuito",
+      required: "Campo obrigatÃ³rio",
+      invalidEmail: "E-mail invÃ¡lido",
       passwordMin: "A senha deve ter ao menos 8 caracteres",
-      passwordMismatch: "As senhas digitadas não correspondem.",
+      passwordMismatch: "As senhas digitadas nÃ£o correspondem.",
       select: "Selecione",
     },
     options: ["1 pessoa (apenas eu)", "2 pessoas", "3 a 4 pessoas", "5 a 8 pessoas", "9 a 11 pessoas", "12 a 15 pessoas", "Mais de 15 pessoas"],
     cards: [
-      { title: "14 dias de acesso grátis", text: "Use o sistema sem compromisso e conte com nosso time durante o período de testes." },
-      { title: "Sem instalação", text: "Acesse de qualquer lugar, inclusive pelo celular, sem precisar instalar nada." },
-      { title: "Sem cartão de crédito", text: "Você não precisa cadastrar cartão para testar o Belle Software." },
+      { title: "14 dias de acesso grÃ¡tis", text: "Use o sistema sem compromisso e conte com nosso time durante o perÃ­odo de testes." },
+      { title: "Sem instalaÃ§Ã£o", text: "Acesse de qualquer lugar, inclusive pelo celular, sem precisar instalar nada." },
+      { title: "Sem cartÃ£o de crÃ©dito", text: "VocÃª nÃ£o precisa cadastrar cartÃ£o para testar o Belle Software." },
     ],
-    sideTitle: "Gerenciar sua clínica fica mais fácil com o Belle Software",
+    sideTitle: "Gerenciar sua clÃ­nica fica mais fÃ¡cil com o Belle Software",
     sideItems: [
-      { title: "Soluções sob medida para sua clínica", text: "Gerencie agendamentos, controle estoque e fidelize clientes com facilidade." },
-      { title: "Eficiência e qualidade em um só lugar", text: "Reduza o tempo gasto em tarefas administrativas e foque nos seus clientes." },
-      { title: "Aumente sua receita com o Belle Software", text: "Identifique oportunidades de crescimento e aumente a satisfação dos seus clientes." },
-      { title: "Automatização total", text: "Menos tempo com papelada, mais tempo com seus clientes." },
-      { title: "Integração fácil e suporte especializado", text: "Implementação rápida e suporte dedicado para garantir seu sucesso." },
+      { title: "SoluÃ§Ãµes sob medida para sua clÃ­nica", text: "Gerencie agendamentos, controle estoque e fidelize clientes com facilidade." },
+      { title: "EficiÃªncia e qualidade em um sÃ³ lugar", text: "Reduza o tempo gasto em tarefas administrativas e foque nos seus clientes." },
+      { title: "Aumente sua receita com o Belle Software", text: "Identifique oportunidades de crescimento e aumente a satisfaÃ§Ã£o dos seus clientes." },
+      { title: "AutomatizaÃ§Ã£o total", text: "Menos tempo com papelada, mais tempo com seus clientes." },
+      { title: "IntegraÃ§Ã£o fÃ¡cil e suporte especializado", text: "ImplementaÃ§Ã£o rÃ¡pida e suporte dedicado para garantir seu sucesso." },
     ],
     sideMore: "E muito mais!",
-    sideFinal: "Transforme sua gestão com o melhor sistema para clínicas de estética!",
+    sideFinal: "Transforme sua gestÃ£o com o melhor sistema para clÃ­nicas de estÃ©tica!",
     countries: [
       "Brasil",
       "Argentina",
       "Chile",
-      "Colômbia",
-      "México",
+      "ColÃ´mbia",
+      "MÃ©xico",
       "Paraguai",
       "Peru",
       "Portugal",
       "Uruguai",
       "Estados Unidos",
-      "Canadá",
+      "CanadÃ¡",
       "Espanha",
-      "França",
-      "Itália",
+      "FranÃ§a",
+      "ItÃ¡lia",
       "Alemanha",
       "Reino Unido",
-      "Japão",
+      "JapÃ£o",
       "China",
-      "Austrália",
+      "AustrÃ¡lia",
     ],
   },
   en: {
@@ -329,68 +329,68 @@ const copyByLang: Record<TestePageLanguage, Copy> = {
     ],
   },
   es: {
-    title: "Optimiza la gestión de tu clínica",
-    subtitle: "Prueba gratis los recursos que el mejor sistema para clínicas estéticas puede ofrecer.",
+    title: "Optimiza la gestiÃ³n de tu clÃ­nica",
+    subtitle: "Prueba gratis los recursos que el mejor sistema para clÃ­nicas estÃ©ticas puede ofrecer.",
     backToSite: "Volver al sitio",
-    formTitle: "¡Prueba Belle Software gratis!",
-    success: "¡Gracias! Tus datos fueron enviados correctamente.",
-    talkNow: "¿Prefieres hablar ahora? Escríbenos por WhatsApp",
+    formTitle: "Â¡Prueba Belle Software gratis!",
+    success: "Â¡Gracias! Tus datos fueron enviados correctamente.",
+    talkNow: "Â¿Prefieres hablar ahora? EscrÃ­benos por WhatsApp",
     labels: {
       fullName: "Nombre",
       phone: "Celular",
-      phoneCode: "Código",
-      professionalsRange: "¿Cuántos profesionales trabajan en tu clínica?",
-      country: "País",
+      phoneCode: "CÃ³digo",
+      professionalsRange: "Â¿CuÃ¡ntos profesionales trabajan en tu clÃ­nica?",
+      country: "PaÃ­s",
       state: "Estado",
       city: "Ciudad",
-      email: "Correo electrónico",
-      password: "Crea una contraseña",
-      confirmPassword: "Confirma tu contraseña",
-      showPassword: "Mostrar contraseña",
-      hidePassword: "Ocultar contraseña",
-      terms: "He leído y acepto los",
-      termsLink: "Términos y Condiciones",
+      email: "Correo electrÃ³nico",
+      password: "Crea una contraseÃ±a",
+      confirmPassword: "Confirma tu contraseÃ±a",
+      showPassword: "Mostrar contraseÃ±a",
+      hidePassword: "Ocultar contraseÃ±a",
+      terms: "He leÃ­do y acepto los",
+      termsLink: "TÃ©rminos y Condiciones",
       button: "Comenzar mi prueba gratis",
       required: "Campo obligatorio",
-      invalidEmail: "Correo electrónico inválido",
-      passwordMin: "La contraseña debe tener al menos 8 caracteres",
-      passwordMismatch: "Las contraseñas no coinciden.",
+      invalidEmail: "Correo electrÃ³nico invÃ¡lido",
+      passwordMin: "La contraseÃ±a debe tener al menos 8 caracteres",
+      passwordMismatch: "Las contraseÃ±as no coinciden.",
       select: "Selecciona",
     },
-    options: ["1 profesional", "2 profesionales", "3 a 4 profesionales", "5 a 8 profesionales", "9 a 11 profesionales", "12 a 15 profesionales", "Más de 15 profesionales"],
+    options: ["1 profesional", "2 profesionales", "3 a 4 profesionales", "5 a 8 profesionales", "9 a 11 profesionales", "12 a 15 profesionales", "MÃ¡s de 15 profesionales"],
     cards: [
-      { title: "14 días de acceso gratis", text: "Usa el sistema sin compromiso y con el apoyo de nuestro equipo durante el período de prueba." },
-      { title: "Sin instalación", text: "Accede desde cualquier lugar, incluso desde el celular, sin instalar nada." },
-      { title: "Sin tarjeta de crédito", text: "No necesitas registrar una tarjeta para probar Belle Software." },
+      { title: "14 dÃ­as de acceso gratis", text: "Usa el sistema sin compromiso y con el apoyo de nuestro equipo durante el perÃ­odo de prueba." },
+      { title: "Sin instalaciÃ³n", text: "Accede desde cualquier lugar, incluso desde el celular, sin instalar nada." },
+      { title: "Sin tarjeta de crÃ©dito", text: "No necesitas registrar una tarjeta para probar Belle Software." },
     ],
-    sideTitle: "Gestionar tu clínica es más fácil con Belle Software",
+    sideTitle: "Gestionar tu clÃ­nica es mÃ¡s fÃ¡cil con Belle Software",
     sideItems: [
-      { title: "Soluciones a medida para tu clínica", text: "Gestiona citas, controla inventario y fideliza clientes con facilidad." },
-      { title: "Eficiencia y calidad en un solo lugar", text: "Reduce el tiempo en tareas administrativas y enfócate en tus clientes." },
-      { title: "Aumenta tus ingresos con Belle Software", text: "Identifica oportunidades de crecimiento y mejora la satisfacción de tus clientes." },
-      { title: "Automatización total", text: "Menos tiempo en papeleo, más tiempo con tus clientes." },
-      { title: "Integración fácil y soporte especializado", text: "Implementación rápida y soporte dedicado para garantizar tu éxito." },
+      { title: "Soluciones a medida para tu clÃ­nica", text: "Gestiona citas, controla inventario y fideliza clientes con facilidad." },
+      { title: "Eficiencia y calidad en un solo lugar", text: "Reduce el tiempo en tareas administrativas y enfÃ³cate en tus clientes." },
+      { title: "Aumenta tus ingresos con Belle Software", text: "Identifica oportunidades de crecimiento y mejora la satisfacciÃ³n de tus clientes." },
+      { title: "AutomatizaciÃ³n total", text: "Menos tiempo en papeleo, mÃ¡s tiempo con tus clientes." },
+      { title: "IntegraciÃ³n fÃ¡cil y soporte especializado", text: "ImplementaciÃ³n rÃ¡pida y soporte dedicado para garantizar tu Ã©xito." },
     ],
-    sideMore: "¡Y mucho más!",
-    sideFinal: "¡Transforma tu gestión con el mejor sistema para clínicas estéticas!",
+    sideMore: "Â¡Y mucho mÃ¡s!",
+    sideFinal: "Â¡Transforma tu gestiÃ³n con el mejor sistema para clÃ­nicas estÃ©ticas!",
     countries: [
       "Brasil",
       "Argentina",
       "Chile",
       "Colombia",
-      "México",
+      "MÃ©xico",
       "Paraguay",
-      "Perú",
+      "PerÃº",
       "Portugal",
       "Uruguay",
       "Estados Unidos",
-      "Canadá",
-      "España",
+      "CanadÃ¡",
+      "EspaÃ±a",
       "Francia",
       "Italia",
       "Alemania",
       "Reino Unido",
-      "Japón",
+      "JapÃ³n",
       "China",
       "Australia",
     ],
@@ -404,9 +404,30 @@ const termsPathByLang: Record<TestePageLanguage, string> = {
 };
 
 const sourceLabelByLang: Record<TestePageLanguage, string> = {
-  pt: "Site em português",
-  en: "Site em inglês",
+  pt: "Site em portuguÃªs",
+  en: "Site em inglÃªs",
   es: "Site em espanhol",
+};
+
+const submitErrorByLang: Record<TestePageLanguage, { generic: string; config: string; network: string; validation: string }> = {
+  pt: {
+    generic: "NÃ£o foi possÃ­vel enviar agora. Tente novamente.",
+    config: "ConfiguraÃ§Ã£o de envio indisponÃ­vel no ambiente online. Contate o suporte.",
+    network: "Falha de conexÃ£o no envio. Verifique sua internet e tente novamente.",
+    validation: "Revise os campos obrigatÃ³rios e tente novamente.",
+  },
+  en: {
+    generic: "Unable to send right now. Please try again.",
+    config: "Submission settings are unavailable in this online environment. Please contact support.",
+    network: "Connection failed while sending. Check your internet and try again.",
+    validation: "Please review required fields and try again.",
+  },
+  es: {
+    generic: "No fue posible enviar ahora. IntÃ©ntalo de nuevo.",
+    config: "La configuraciÃ³n de envÃ­o no estÃ¡ disponible en este entorno online. Contacta al soporte.",
+    network: "FallÃ³ la conexiÃ³n durante el envÃ­o. Revisa tu internet e intÃ©ntalo de nuevo.",
+    validation: "Revisa los campos obligatorios e intÃ©ntalo de nuevo.",
+  },
 };
 
 function schema(lang: TestePageLanguage, labels: Copy["labels"]) {
@@ -568,31 +589,110 @@ export function TestePage({ lang = "pt" }: { lang?: TestePageLanguage }) {
 
   const onSubmit = async (values: FormValues) => {
     setSubmitError("");
+    const errorText = submitErrorByLang[lang];
+    const payload = {
+      fullName: values.fullName,
+      email: values.email,
+      city: values.city,
+      state: values.state,
+      country: values.country,
+      phone: `${values.phoneCode} ${values.phone}`.trim(),
+      professionalsRange: values.professionalsRange,
+      lang,
+      sourcePath: sourceLabelByLang[lang],
+      sourceQuery: window.location.search,
+    };
+
     try {
       const supabase = getSupabaseClient();
-      const { error } = await supabase.functions.invoke("create-pricing-lead", {
-        body: {
-          fullName: values.fullName,
-          email: values.email,
-          city: values.city,
-          state: values.state,
-          country: values.country,
-          phone: `${values.phoneCode} ${values.phone}`.trim(),
-          professionalsRange: values.professionalsRange,
-          lang,
-          sourcePath: sourceLabelByLang[lang],
-          sourceQuery: window.location.search,
-        },
+      const { data, error } = await supabase.functions.invoke("create-pricing-lead", {
+        body: payload,
       });
 
       if (error) {
-        setSubmitError("Não foi possível enviar agora. Tente novamente.");
+        console.error("Lead submit error via invoke, trying direct function call:", error);
+
+        const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string | undefined)?.trim();
+        const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined)?.trim();
+
+        if (!supabaseUrl || !supabaseAnonKey) {
+          setSubmitError(errorText.config);
+          return;
+        }
+
+        const directResponse = await fetch(`${supabaseUrl}/functions/v1/create-pricing-lead`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const directData = (await directResponse.json().catch(() => null)) as
+          | {
+              ok?: boolean;
+              code?: string;
+              fieldErrors?: Record<string, string | string[]>;
+            }
+          | null;
+
+        if (directResponse.ok && directData?.ok) {
+          setSent(true);
+          return;
+        }
+
+        if (directData?.code === "VALIDATION_ERROR" && directData.fieldErrors) {
+          const firstFieldError = Object.values(directData.fieldErrors)
+            .flatMap((message) => (Array.isArray(message) ? message : [message]))
+            .find((message) => typeof message === "string" && message.trim().length > 0);
+          setSubmitError(firstFieldError ?? errorText.validation);
+          return;
+        }
+
+        setSubmitError(errorText.network);
+        return;
+      }
+
+      const response = data as
+        | {
+            ok?: boolean;
+            code?: string;
+            fieldErrors?: Record<string, string | string[]>;
+          }
+        | null;
+
+      if (!response?.ok) {
+        if (response?.code === "VALIDATION_ERROR" && response.fieldErrors) {
+          const firstFieldError = Object.values(response.fieldErrors)
+            .flatMap((message) => (Array.isArray(message) ? message : [message]))
+            .find((message) => typeof message === "string" && message.trim().length > 0);
+
+          setSubmitError(firstFieldError ?? errorText.validation);
+          return;
+        }
+
+        setSubmitError(errorText.generic);
         return;
       }
 
       setSent(true);
-    } catch {
-      setSubmitError("Não foi possível enviar agora. Tente novamente.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message.toLowerCase() : "";
+      console.error("Lead submit exception:", err);
+
+      if (message.includes("supabase env vars missing")) {
+        setSubmitError(errorText.config);
+        return;
+      }
+
+      if (message.includes("failed to fetch") || message.includes("network")) {
+        setSubmitError(errorText.network);
+        return;
+      }
+
+      setSubmitError(errorText.generic);
     }
   };
 
@@ -663,7 +763,7 @@ export function TestePage({ lang = "pt" }: { lang?: TestePageLanguage }) {
                   <div className="pointer-events-none absolute left-2 top-1/2 z-10 -translate-y-1/2">
                     <img
                       src={phoneFlagByCode[selectedPhoneCode] ?? phoneFlagByCode["+55"]}
-                      alt="Bandeira do código"
+                      alt="Bandeira do cÃ³digo"
                       className="h-4 w-6 rounded-[2px] object-cover"
                     />
                   </div>
@@ -849,7 +949,7 @@ export function TestePage({ lang = "pt" }: { lang?: TestePageLanguage }) {
                 <article key={item.title} className="mb-4 flex rounded-[10px]">
                   <div className="mr-4 flex items-center justify-center text-2xl font-bold">
                     <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-[#f1ffeb] text-[#287338]">
-                      <span className="text-base leading-none">✓</span>
+                      <span className="text-base leading-none">âœ“</span>
                     </div>
                   </div>
                   <div>
@@ -867,3 +967,5 @@ export function TestePage({ lang = "pt" }: { lang?: TestePageLanguage }) {
     </main>
   );
 }
+
+
