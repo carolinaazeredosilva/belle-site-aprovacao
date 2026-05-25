@@ -157,6 +157,24 @@ Deno.serve(async (req) => {
     }
 
     const emailStatus = await sendLeadNotificationEmail(body);
+
+    if (!emailStatus.ok) {
+      console.error("Lead saved, but email delivery failed", {
+        leadId: data.id,
+        emailStatus,
+      });
+
+      return Response.json(
+        {
+          ok: false,
+          code: "EMAIL_DELIVERY_FAILED",
+          leadId: data.id,
+          emailStatus,
+        },
+        { status: 502, headers: corsHeaders },
+      );
+    }
+
     return Response.json({ ok: true, leadId: data.id, emailStatus }, { headers: corsHeaders });
   } catch {
     return Response.json({ ok: false, code: "INTERNAL_ERROR" }, { status: 500, headers: corsHeaders });
